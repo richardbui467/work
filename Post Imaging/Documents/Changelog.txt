@@ -1,0 +1,15 @@
+Post-Imaging Script Changelog
+
+v.0.1. - 3/23/2020
+
+Created the script and got a little started on implementing options for
+Windows Updates but didn't get very far
+
+v.0.5.0 - 3/25/2020
+
+Added code for other actions (install VPN, BIOS, local admin)
+Mostly finished the code for Windows Updates
+Added a huge block of code that just elevates the prompt
+Haven't really properly tested the other features besides Windows Updates
+Planning on reworking the code for BIOS updates 
+

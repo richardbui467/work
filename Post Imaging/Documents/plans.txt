@@ -1,0 +1,8 @@
+Ideas for post-imaging script:
+
+Allow the end user to:
+
+Update Windows 
+Install any necessary software (software request, VPN, Dell Command Update/HP Support Assistant)
+Integrate software script eventually
+Make client local admin 

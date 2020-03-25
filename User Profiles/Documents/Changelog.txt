@@ -1,0 +1,11 @@
+v1.0 
+
+Shows user profiles and gives the option to delete any
+
+v1.1 
+
+Added a loop so that if the user wanted to delete multiple they can
+
+v1.1.1 
+
+Added environmental variables

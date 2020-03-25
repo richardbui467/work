@@ -1,0 +1,25 @@
+Version 1.0 - 3/4/2020
+
+Made to read from various software directories which are checked against a list of software
+
+Version 1.2 - 3/5/2020
+
+Added more blank lines to make the front-end look better
+Added an "else" statement in case the user wanted to save "local_software.txt"
+Added a prompt asking the user where they would want to save the results instead of just displaying the results in the PowerShell prompt (which didn't work)
+Changed "installed_software_unique.txt" to "local_software.txt" because it was annoying and long
+Added prompts for which software sets the user wants to compare with (lab, classroom, standard)
+
+Version 1.2.1 - 3/5/2020
+
+Fixed some errors regarding file paths
+Changed the message explaining the results
+
+Version 1.2.2 - 3/6/2020
+
+Fixed accuracy regarding O365 products
+Updated the shell messages to inform users of the accuracy
+
+Version 1.3 - 3/9/2020
+
+Added flexibility for appending extra software by using nested if statements and loops 

@@ -1,0 +1,33 @@
+7-Zip
+Box
+Faronics
+Microsoft Office
+Microsoft Power BI Desktop
+RStudio
+R
+SASHome
+SunGard
+VMWare
+Mozilla Firefox
+ABTutor
+Adobe Acrobat Reader DC
+Google
+KDiff3
+Milliman
+MySQL
+ProcessModel
+Symantec
+VideoLAN
+Anaconda3 (64-bit)
+Wepa
+Microsoft Office
+OneNote.lnk
+Outlook.lnk
+Powerpoint.lnk
+Word.lnk
+Publisher.lnk
+Excel.lnk
+Access.lnk
+Microsoft Visual Studio 2010
+Microsoft.NET
+

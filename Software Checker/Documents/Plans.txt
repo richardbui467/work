@@ -1,0 +1,5 @@
+Future plans:
+
+Look into accuracy
+
+Make the script work from anywhere and not just from the root of C:
