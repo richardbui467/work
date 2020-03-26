@@ -1,11 +1,11 @@
 Post-Imaging Script Changelog
 
-v.0.1. - 3/23/2020
+v. 0.1.0 - 3/23/2020
 
 Created the script and got a little started on implementing options for
 Windows Updates but didn't get very far
 
-v.0.5.0 - 3/25/2020
+v. 0.5.0 - 3/25/2020
 
 Added code for other actions (install VPN, BIOS, local admin)
 Mostly finished the code for Windows Updates
@@ -13,3 +13,11 @@ Added a huge block of code that just elevates the prompt
 Haven't really properly tested the other features besides Windows Updates
 Planning on reworking the code for BIOS updates 
 
+v. 0.7.0 - 3/26/2020
+
+Revamped how BIOS updates worked, have yet to finish on the HP portion
+Added some QoL progress bars for installations and implemented silent installs
+for Cisco VPN and other software that don't need manual installation
+Added enabling optional features as a sixth choice
+Added the ability to install additional lab software as a fifth choice,
+currently under development
