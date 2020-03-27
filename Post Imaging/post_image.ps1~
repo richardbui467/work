@@ -19,7 +19,7 @@ exit
 $b = echo "`n" 
 
 cls
-echo "Post-Imaging Script v. 0.6" 
+echo "Post-Imaging Script v. 0.7.0" 
 $b
 echo "This script automates several procedures of the post-imaging process" 
 $b
@@ -111,6 +111,7 @@ if($action -eq "2"){
         echo "HP Support Assistant has been installed!"
 
         }
+
 }
 
 if($action -eq "3"){ 
@@ -127,16 +128,32 @@ if($action -eq "3"){
 
         Get-LocalGroupMember -Group "Administrators"
 
-        }     
+        }
+           
     }
 
 if($action -eq "4"){
+
+    #Retrieves the VPN installer from Aquarius and installs it
+
+    echo "Cisco AnyConnect will be installed now."
+    $b
+    pause
+    cls
+    Write-Progress -Activity "The Cisco AnyConnect installer is being copied from $rootpath\Cisco AnyConnect\ to the Downloads folder..." 
+    Copy-Item -Path "$rootpath\Cisco AnyConnect\anyconnect-win-4.7.04056-core-vpn-webdeploy-k9.exe" -Destination "$destination"
+    Write-Progress -Activity "Installing Cisco AnyConnect..."
+    Start-Process -FilePath "$destination\anyconnect-win-4.7.04056-core-vpn-webdeploy-k9.exe" -ArgumentList /qn
+    echo "Cisco AnyConnect has been installed!" 
+
+    }
+
+if($action -eq "5"){
       
     cls
-    echo "1.) Anaconda `n`n2.) .NET 3.5 `n`n3.) SAS `n`n4.) MySQL `n`n5.) Prophet `n`n6.) Microsoft Power BI `
-    `n7.) Cisco AnyConnect"
+    echo "1.) Anaconda `n2.) .NET 3.5 `n3.) SAS `n4.) MySQL `n5.) Prophet `n6.) Microsoft Power BI"
     $b
-    $choice = Read-Host "Which software would you like to install? Please enter in the full name"
+    $choice = Read-Host "Which software would you like to install? Please enter in the full name."
     $software = $choice
 
     function install{
@@ -160,7 +177,7 @@ if($action -eq "4"){
         if($install -eq "Y"){ 
 
             Write-Progress -Activity "$ProgramName is now being installed..." 
-            Start-Process -FilePath "$DestinationPath\$Installer" -ArgumentList /qn 
+            Start-Process -FilePath "$DestinationPath\$Installer" -ArgumentList /qn
             echo "$ProgramName is now installed!" 
         
             }else{
@@ -170,15 +187,19 @@ if($action -eq "4"){
                 echo "$ProgramName is now installed!" 
             
             }
-        }
-
-    function installparam{
-
-        install -DestinationPath $destination -ProgramName $software -ProgramPath $programPath -Installer $exe 
 
         }
 
-    function dotnet{
+    if($software -eq "Anaconda"){
+
+        $softwarePath = "$rootpath\Anaconda\Anaconda3-2019.10-Windows-x86_64 (1).exe"
+        $exe = "Anaconda3-2019.10-Windows-x86_64 (1).exe"
+
+        install -DestinationPath $destination -ProgramName $software -ProgramPath $programPath -Installer $exe
+
+        }
+
+    if($software -eq ".NET 3.5"){
 
         echo ".NET 3.5 will now be installed..."
         $b
@@ -197,119 +218,81 @@ if($action -eq "4"){
         Pop-Location 
         echo ".NET 3.5 is now installed!"
 
-        }
-
-    function prereq{
-
-        param(
-
-            [string]$programName,
-            [string]$preProgramName,
-            [string]$preProgramPath,
-            [string]$preDestinationPath,
-            [string]$preInstaller
-
-            )
-
-        if("$preProgramPath" -eq $true){
-
-            echo "$preProgramName is installed on the computer. The installation of $programName will proceed."
-            installparam
-
-                }else{
-
-                    echo "$preProgramName is not installed on the computer. This will be installed first."
-                    Copy-Item $preProgramPath -Destination $destination
-                    Write-Process -Activity "Installing $preProgramName..."
-                    Start-Process $destination\$preInstaller -ArgumentList /qn -Wait
-                    installparam
-
-                }
-         }
-                  
-
-    function prereqparam{
-
-        prereq -preProgramName $preName -preProgramPath $prePath -preInstaller $preExe -preDestinationPath $destination
-   
-        }
-
-    if($software -eq "Anaconda"){
-
-        $programPath = "$rootpath\Anaconda\Anaconda3-2019.10-Windows-x86_64 (1).exe"
-        $exe = "Anaconda3-2019.10-Windows-x86_64 (1).exe"
-
-        installparam
-
-        }
-
-    if($software -eq ".NET 3.5"){
-
-        dotnet
-
-        }
+    }
 
     if($software -eq "SAS"){
 
-        $programPath = "\\statsrv\SAS\SAS 9.4\SAS 9.4 TS1M2\setup.exe"
+        $softwarePath = "\\statsrv\SAS\SAS 9.4\SAS 9.4 TS1M2\setup.exe"
         $exe = "setup.exe"
 
         if("C:\Windows\Microsoft.NET\Framework64\v3.5\" -eq $true){
 
             echo ".NET 3.5 is installed on the computer. The installation of SAS will proceed."
-            installparam
+            install -DestinationPath $destination -ProgramName $software -ProgramPath $programPath -Installer $exe
 
             }else{ 
                 
-                echo ".NET 3.5 is not installed on the computer. This will be installed first."
-                $b
-                pause
-                dotnet
-                $b
-                pause
-                $b
-                installparam
+                echo "Visual Studio 2015 is not installed on the computer. This will be installed first."
+                Copy-Item "$rootpath\Microsoft Visual Studio\Microsoft Visual Studio 2015\vs_professional__7c37f2f3d6c2a642899d97a8291bd3a7.exe" -Destination $destination
+                Write-Process -Activity "Installing Visual Studio 2015..."
+                Start-Process $destination\$exe -ArgumentList /qn -Wait
+                install -DestinationPath $destination -ProgramName $software -ProgramPath $programPath -Installer $exe 
                 
                 }   
+
+     
     }
 
     if($software -eq "MySQL"){
 
-        $programPath = "$rootpath\MySQL Community Server\Current2020\[USE THIS ONE] mysql-installer-community-8.0.19.0.msi"
+        $softwarePath = "$rootpath\MySQL Community Server\Current2020\[USE THIS ONE] mysql-installer-community-8.0.19.0.msi"
         $exe = "[USE THIS ONE] mysql-installer-community-8.0.19.0.msi"
-        $preProgramPath = "$env:ProgramFiles(x86)\Microsoft Visual Studio 14.0"
-        $preName = "Visual Studio 2015" 
-        $preExe = "vs_professional__7c37f2f3d6c2a642899d97a8291bd3a7.exe"
 
-        prereqparam
+        if("$env:ProgramFiles(x86)\Microsoft Visual Studio 14.0" -eq $true){
+
+            echo "Visual Studio 2015 is installed on the computer. The installation of Prophet will proceed."
+            install -DestinationPath $destination -ProgramName $software -ProgramPath $programPath -Installer $exe
+
+                }else{
+
+                    echo "Visual Studio 2015 is not installed on the computer. This will be installed first."
+                    Copy-Item "$rootpath\Microsoft Visual Studio\Microsoft Visual Studio 2015\vs_professional__7c37f2f3d6c2a642899d97a8291bd3a7.exe" -Destination $destination
+                    Write-Process -Activity "Installing Visual Studio 2015..."
+                    Start-Process $destination\$exe -ArgumentList /qn -Wait
+                    install -DestinationPath $destination -ProgramName $software -ProgramPath $programPath -Installer $exe
+
+                }
+
     }
 
     if($software -eq "Prophet"){
 
-        $programName = "Prophet"
-        $programPath = "$rootpath\Prophet\Install Second - Prophet Professional\PP 9.0.4\PP 9.0.4\Setup.exe"
+        $softwarePath = "$rootpath\Prophet\Install Second - Prophet Professional\PP 9.0.4\PP 9.0.4\Setup.exe"
         $exe = "Setup.exe"
-        $preProgramPath = "$env:ProgramFiles(x86)\Microsoft Visual Studio 12.0"
-        $preName = "Visual Studio 2013"
-        $preExe = "wdexpress_full.exe"
 
-        prereqparam
+        if("$env:ProgramFiles(x86)\Microsoft Visual Studio 12.0" -eq $true){
+
+            echo "Visual Studio 2013 is installed on the computer."
+            install -DestinationPath $destination -ProgramName $software -ProgramPath $programPath -Installer $exe
+
+            }else{
+
+                echo "Visual Studio 2013 is not installed on the computer. This will be installed first."
+                Copy-Item "$rootpath\Prophet\Install First - Visual Studio 2013 Express Edition\wdexpress_full.exe" -Destination $destination
+                Write-Progress -Activity "Installing Visual Studio 2013..."
+                Start-Process "$destination\wdexpress_full.exe" -ArgumentList /qn -Wait
+            
+            }
+    
+    }
 
     if($software -eq "Microsoft Power BI"){
 
-        $programPath = "$rootpath\Power BI\PBIDesktop_x64.msi"
+        $softwarePath = "$rootpath\Power BI\PBIDesktop_x64.msi"
         $exe = "PBIDesktop_x64.msi"
 
-        installparam
+        install -DestinationPath $destination -ProgramName $software -ProgramPath $programPath -Installer $exe
 
         }
-
-    if($software -eq "Cisco AnyConnect"){
-
-        $programPath = "$rootpath\Cisco AnyConnect\anyconnect-win-4.7.04056-core-vpn-webdeploy-k9.exe"
-        $exe = "anyconnect-win-4.7.04056-core-vpn-webdeploy-k9.exe"
-
-        installparam
     }
-}
 

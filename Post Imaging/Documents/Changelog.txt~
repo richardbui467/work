@@ -22,12 +22,11 @@ for Cisco VPN and other software that don't need manual installation
 - Added the ability to install additional lab software as a fifth choice,
 currently under development
 
-v. 0.6 - 3/27/2020
+v. 0.5.5 - 3/27/2020
 
 - Added small text output changes to Windows Updates
 - HP Support Assistant is just in its own folder now and the script will just
 call to it from there instead of on the Internet like Dell Command Update
 - Developed the lab software installation option a bit more. It seems I have
 achieved functionality with installing Anaconda but I'm not sure about the
-rest. Right now there's a lot of functions within functions and variables
-within variables.
+rest.
