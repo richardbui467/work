@@ -30,7 +30,7 @@ exit
 function Actions{
 
     Write-Host "You can perform the following `n`n1.) Windows updates `n`n2.) BIOS updates
-    `n3.) Make the client a local admin `n`n5.) Install software"
+    `n3.) Make the client a local admin `n`n4.) Install software"
     `n
     $action = Read-Host "Which action would you like to perform?"
     $action.ToString()
@@ -68,36 +68,7 @@ function Navigate{
 
     if($othertask -eq "Y"){
        
-        Write-Host "You can perform the following `n`n1.) Windows updates `n`n2.) BIOS updates
-        `n3.) Make the client a local admin `n`n5.) Install software"
-        `n
-        $action = Read-Host "Which action would you like to perform?"
-        $action.ToString()
-        cls
-
-        if($action -eq "1"){ 
-
-            Windows
-
-            }
-
-        if($action -eq "2"){
-
-            BIOS
-
-            }
-
-        if($action -eq "3"){
-
-            Admin 
-
-            }
-
-        if($action -eq "4"){ 
-
-            Software
-
-            }
+        Actions
 
         }else{
 
@@ -123,6 +94,10 @@ function Windows{
     
             #Installs and accepts all the updates automatically
         	Install-WindowsUpdate -AcceptAll 
+            `n
+            pause
+            cls
+            Navigate
 
         	}
 
@@ -142,7 +117,11 @@ function Windows{
    
     	    if($update -eq "Y"){ 
     
-            	Install-WindowsUpdate -AcceptAll 
+            	Install-WindowsUpdate -AcceptAll
+                `n
+                pause
+                cls
+                Navigate 
 
             	}
 	        }
@@ -168,6 +147,10 @@ function BIOS{
         Write-Progress -Activity "Installing Dell Command Update..."
         Start-Process "$destination\Dell-Command-Update-Win-32_PH01C_WIN_3.1.1_A00.exe" -ArgumentList /qn
         Write-Host "Dell Command Update has been installed!"
+        `n
+        pause
+        cls
+        Navigate
     
         }
     
@@ -182,6 +165,10 @@ function BIOS{
         Write-Progress -Activity "Installing HP Support Assistant..." 
         Start-Process "$destination\sp101214.exe" -ArgumentList /qn
         Write-Host "HP Support Assistant has been installed!"
+        `n
+        pause
+        cls
+        Navigate
     
         }
 }
@@ -191,7 +178,7 @@ function Admin{
     #Asks the user for an AD account, adds it to the local admin group, and prints out the local admin group for confirmation
     
     $user = Read-Host "Who would you like to add to the local administrators group? Please enter in the Active Directory account name"
-    
+    `n
     $confirm = Read-Host "Are you sure you want to add $user to the local administrator's group? [Y/N]"
     
     if($confirm -eq "Y"){
@@ -209,11 +196,31 @@ function Admin{
 function Software{
 
     cls
-    Write-Host "1.) Anaconda `n`n2.) .NET 3.5 `n`n3.) SAS `n`n4.) MySQL `n`n5.) Prophet `n`n6.) Microsoft Power BI `
-    `n7.) Cisco AnyConnect"
-    `n
-    $choice = Read-Host "Which software would you like to install? Please enter in the full name"
-    $software = $choice
+    
+    function Library{
+
+        Write-Host "1.) Anaconda `n`n2.) .NET 3.5 `n`n3.) SAS `n`n4.) MySQL `n`n5.) Prophet `n`n6.) Microsoft Power BI `
+        `n7.) Cisco AnyConnect"
+        `n
+        $choice = Read-Host "Which software would you like to install? Please enter in the full name"
+        $software = $choice
+    
+    }
+
+    function InstallOther{
+
+        $othersoftware = Read-Host "Would you like to install another piece of software? [Y/N]" 
+
+        if($othersoftware -eq "Y"){
+        
+            Library
+
+        }else{
+
+        Actions
+        
+        }
+    }
     
     function install{
     
@@ -237,13 +244,15 @@ function Software{
     
             Write-Progress -Activity "$ProgramName is now being installed..." 
             Start-Process -FilePath "$DestinationPath\$Installer" -ArgumentList /qn 
-            Write-Host "$ProgramName is now installed!" 
+            Write-Host "$ProgramName is now installed!"
+            `n 
         
             }else{
     
                 Write-Progress -Activity "$ProgramName is now being installed..." 
                 Start-Process -FilePath "$DestinationPath\$Installer" 
-                Write-Host "$ProgramName is now installed!" 
+                Write-Host "$ProgramName is now installed!"
+                `n
             
                 }
         }
@@ -291,6 +300,7 @@ function Software{
     
             Write-Host "$preProgramName is installed on the computer. The installation of $programName will proceed."
             installparam
+            InstallOther
     
                 }else{
     
@@ -299,6 +309,7 @@ function Software{
                     Write-Process -Activity "Installing $preProgramName..."
                     Start-Process $destination\$preInstaller -ArgumentList /qn -Wait
                     installparam
+                    InstallOther
     
                     }
          }
@@ -308,6 +319,8 @@ function Software{
         prereq -preProgramName $preName -preProgramPath $prePath -preInstaller $preExe -preDestinationPath $destination
     
         }
+
+    Library
     
     if($software -eq "Anaconda"){
     
@@ -315,12 +328,14 @@ function Software{
         $exe = "Anaconda3-2019.10-Windows-x86_64 (1).exe"
     
         installparam
+        InstallOther
     
         }
     
     if($software -eq ".NET 3.5"){
     
         dotnet
+        Installother
     
         }
     
@@ -333,6 +348,7 @@ function Software{
     
             Write-Host ".NET 3.5 is installed on the computer. The installation of SAS will proceed."
             installparam
+            InstallOther
     
             }else{ 
                 
@@ -379,6 +395,7 @@ function Software{
         $exe = "PBIDesktop_x64.msi"
     
         installparam
+        InstallOther
     
         }
     
@@ -388,6 +405,7 @@ function Software{
         $exe = "anyconnect-win-4.7.04056-core-vpn-webdeploy-k9.exe"
     
         installparam
+        InstallOther
 
         }
     
@@ -398,7 +416,7 @@ function Software{
 ElevatePrompt
 
 cls
-Write-Host "Post-Imaging Script v. 0.6" 
+Write-Host "Post-Imaging Script v. 0.7" 
 `n
 Write-Host "This script automates several procedures of the post-imaging process" 
 `n
