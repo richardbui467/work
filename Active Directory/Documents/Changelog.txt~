@@ -1,0 +1,12 @@
+Active Directory Users and Computers script changelog
+
+v.0.1.0 - 3/23/2020
+
+Got started on creating functionality for editing users and computers, but
+there isn't too much that is completed right now. I plan on holding off on
+this script until I get a testing environment up and running.
+
+v 0.5.0 - 3/31/2020
+
+- Finished up some functionality on the user and computer ends of things, need
+to test before going any further
