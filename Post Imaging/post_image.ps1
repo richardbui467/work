@@ -1,12 +1,4 @@
-﻿## VARIABLES ##
-
-$rootpath = "\\cob-aquarius\B$\Install\PC"
-$destination = "$env:USERPROFILE\Downloads"
-
-## FUNCTIONS ##
-
-function ElevatePrompt{
-
+﻿#Elevates the prompt
 param([switch]$Elevated)
 function Check-Admin {
 $currentUser = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -17,8 +9,6 @@ if ($elevated)
 {
 # could not elevate, quit
 }
-
-}
  
 else {
  
@@ -27,56 +17,12 @@ Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -fil
 exit
 }
 
-function Actions{
+## VARIABLES ##
 
-    Write-Host "You can perform the following `n`n1.) Windows updates `n`n2.) BIOS updates
-    `n3.) Make the client a local admin `n`n4.) Install software"
-    `n
-    $action = Read-Host "Which action would you like to perform?"
-    $action.ToString()
-    cls
+$rootpath = "\\cob-aquarius\B$\Install\PC"
+$destination = "$env:USERPROFILE\Downloads"
 
-    if($action -eq "1"){ 
-
-        Windows
-
-        }
-
-    if($action -eq "2"){
-
-        BIOS
-
-        }
-
-    if($action -eq "3"){
-
-        Admin 
-
-        }
-
-    if($action -eq "4"){ 
-
-        Software
-
-        }
-
-}
-
-function Navigate{
-
-    $othertask = Read-Host "Would you like to continue performing other tasks? [Y/N]"
-
-    if($othertask -eq "Y"){
-       
-        Actions
-
-        }else{
-
-        Read-Host "Press Enter to continue" 
-
-        }
-
-    }
+## FUNCTIONS ##
 
 function Windows{
 
@@ -87,17 +33,14 @@ function Windows{
 
         cls
     	Get-WindowsUpdate 
-	    `n
     	$update = Read-Host "Would you like to install the following updates? [Y/N]" 
    
     	if($update -eq "Y"){ 
     
             #Installs and accepts all the updates automatically
         	Install-WindowsUpdate -AcceptAll 
-            `n
             pause
             cls
-            Navigate
 
         	}
 
@@ -105,23 +48,19 @@ function Windows{
 	
             cls
 	        Write-Host "In order to install Windows Updates, a module must be imported" 
-    	    `n
     	    pause
     	    cls
     	    Install-Module "PSWindowsUpdate"
             Read-Host "The module has been installed. Press enter to receive a list of updates."
             cls
     	    Get-WindowsUpdate 
-            `n
     	    $update = Read-Host "Would you like to install the following updates? [Y/N]" 
    
     	    if($update -eq "Y"){ 
     
             	Install-WindowsUpdate -AcceptAll
-                `n
                 pause
                 cls
-                Navigate 
 
             	}
 	        }
@@ -147,10 +86,8 @@ function BIOS{
         Write-Progress -Activity "Installing Dell Command Update..."
         Start-Process "$destination\Dell-Command-Update-Win-32_PH01C_WIN_3.1.1_A00.exe" -ArgumentList /qn
         Write-Host "Dell Command Update has been installed!"
-        `n
         pause
         cls
-        Navigate
     
         }
     
@@ -158,17 +95,14 @@ function BIOS{
         
         #Just copies the HP Support Assistant installer to the Downloads folder and installs it from there since I couldn't find it online
         Write-Host "HP Support Assistant will be installed now."
-        `n
         pause
         cls
         Copy-Item "$pwd\HP\sp101214.exe" -Destination $destination 
         Write-Progress -Activity "Installing HP Support Assistant..." 
         Start-Process "$destination\sp101214.exe" -ArgumentList /qn
         Write-Host "HP Support Assistant has been installed!"
-        `n
         pause
         cls
-        Navigate
     
         }
 }
@@ -178,17 +112,14 @@ function Admin{
     #Asks the user for an AD account, adds it to the local admin group, and prints out the local admin group for confirmation
     
     $user = Read-Host "Who would you like to add to the local administrators group? Please enter in the Active Directory account name"
-    `n
     $confirm = Read-Host "Are you sure you want to add $user to the local administrator's group? [Y/N]"
     
     if($confirm -eq "Y"){
     
         Add-LocalGroupMember -Group "Administrators" -Member $user 
         Get-LocalGroupMember -Group "Administrators"
-        `n
         pause
         cls
-        Navigate
 
         }     
     }
@@ -199,10 +130,15 @@ function Software{
     
     function Library{
 
-        Write-Host "1.) Anaconda `n`n2.) .NET 3.5 `n`n3.) SAS `n`n4.) MySQL `n`n5.) Prophet `n`n6.) Microsoft Power BI `
-        `n7.) Cisco AnyConnect"
-        `n
-        $choice = Read-Host "Which software would you like to install? Please enter in the full name"
+        $choice = Read-Host "1.) Anaconda 
+2.) .NET 3.5 
+3.) SAS 
+4.) MySQL 
+5.) Prophet 
+6.) Microsoft Power BI `
+7.) Cisco AnyConnect
+        
+Which software would you like to install? Please enter in the full name"
         $software = $choice
     
     }
@@ -234,7 +170,6 @@ function Software{
             )
     
         Write-Host "$ProgramName will now be installed."
-        `n
         pause
         cls
         Copy-Item -Path $ProgramPath -Destination "$DestinationPath"
@@ -245,14 +180,12 @@ function Software{
             Write-Progress -Activity "$ProgramName is now being installed..." 
             Start-Process -FilePath "$DestinationPath\$Installer" -ArgumentList /qn 
             Write-Host "$ProgramName is now installed!"
-            `n 
         
             }else{
     
                 Write-Progress -Activity "$ProgramName is now being installed..." 
                 Start-Process -FilePath "$DestinationPath\$Installer" 
                 Write-Host "$ProgramName is now installed!"
-                `n
             
                 }
         }
@@ -266,7 +199,6 @@ function Software{
     function dotnet{
     
         Write-Host ".NET 3.5 will now be installed..."
-        `n
         pause
         cls
         Push-Location
@@ -353,12 +285,9 @@ function Software{
             }else{ 
                 
                 Write-Host ".NET 3.5 is not installed on the computer. This will be installed first."
-                `n
                 pause
                 dotnet
-                `n
                 pause
-                `n
                 installparam
                 
                 }   
@@ -411,18 +340,48 @@ function Software{
     
     }
 
-## INTRODUCTION ##
+Write-Host "Post-Imaging Script v. 0.6.5
 
-ElevatePrompt
+This script automates several procedures of the post-imaging process
 
-cls
-Write-Host "Post-Imaging Script v. 0.7" 
-`n
-Write-Host "This script automates several procedures of the post-imaging process" 
-`n
-Write-Host "Made by Richard Bui 3/23/2020"
-`n 
+Made by Richard Bui 3/23/2020"
+
 pause
 cls
 
-Actions
+    $action = Read-Host  "You can perform the following 
+    
+1.) Windows updates 
+2.) BIOS updates
+3.) Make the client a local admin 
+4.) Install software
+
+
+Which action would you like to perform?"
+
+    cls
+
+    if($action -eq "1"){ 
+
+        Windows
+
+        }
+
+    if($action -eq "2"){
+
+        BIOS
+
+        }
+
+    if($action -eq "3"){
+
+        Admin 
+
+        }
+
+    if($action -eq "4"){ 
+
+        Software
+
+        }
+

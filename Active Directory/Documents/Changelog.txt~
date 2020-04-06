@@ -10,3 +10,22 @@ v 0.5.0 - 3/31/2020
 
 - Finished up some functionality on the user and computer ends of things, need
 to test before going any further
+
+v 0.6.0 - 4/2/2020
+
+- Completely finished functionality for the features in place and they have
+all been tested to work just as intended. Features right now are as follows:
+	
+	-Granting/removing drive access
+	-Enabling/disabling users
+	-Creating new computer objects
+	-Editing computer descriptions
+	-Moving computer objects
+
+- Currently working on giving some divergence to the script and adding
+functions to where the user can go back to certain palces in the script. I've
+added qutie a few functions to help accomplish this task.
+- Worked on cleaning up the standard output a little 
+- Added some QoL changes such as showing the status of an account after it is
+enabled/disabled or showing the list of users when prompting the user for a
+user

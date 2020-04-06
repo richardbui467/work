@@ -20,7 +20,7 @@ exit
 Import-Module "activedirectory"
 
 cls 
-Write-Host "AD Users and Computers v0.6.0" 
+Write-Host "AD Users and Computers v1.0" 
 "`n"
 Write-Host "This script allows you to create users and computers within Active Directory"
 "`n"
@@ -37,13 +37,13 @@ function New-Object{
 
         $name = Read-Host "Enter name"
         $description = Read-Host "Enter description"
-        $path = Read-Host "Enter path (see README if unsure)"
+        $path = Read-Host "Enter the OU path"
 
-        New-ADComputer -Name $name -Description $description -Path $path -Confirm
+        New-ADComputer -Name $name -Description $description -Path "$path,DC=TEST,DC=DOMAIN" -Confirm
 
         "`n"
         $again = Read-Host "Would you like to create another? [Y/N]"
-        $again.ToUpper() 
+        cls
 
         }until($again -eq "N") 
     }
@@ -52,6 +52,7 @@ function Edit-Object{
 
     do{
 
+        Get-ADComputer -Filter * | select Name | Format-Table 
         $computer = Read-Host "Which computer would you like to edit?"
         "`n"
         $desc = Read-Host "Enter new description" 
@@ -61,6 +62,7 @@ function Edit-Object{
         "`n" 
         $again = Read-Host "Would you like to edit another computer's description? [Y/N]" 
         $again.ToUpper()
+        cls
 
         }until($again -eq "N")
     }
@@ -69,46 +71,19 @@ function Move-Object{
 
     do{
 
+        Get-ADComputer -Filter * | select DistinguishedName | Format-Table
         $identity = Read-Host "Please enter the distinguished name of the object to move"
         "`n"
-        $destination = Read-Host "Please enter in the destination of the object"
+        $destination = Read-Host "Please enter in the destination OU of the object"
 
-        Move-ADObject -Identity $identity -TargetPath $destination
+        Move-ADObject -Identity $identity -TargetPath "$destination,DC=TEST,DC=DOMAIN" -Confirm
 
         "`n"
-        $again = Read-Host "Would you like to move another comptuer? [Y/N]" 
+        $again = Read-Host "Would you like to move another computer? [Y/N]" 
         $again.ToUpper()
 
         }until($again -eq "N")
     }
-
-function Computer-Action{
-
-    "`n"
-    $nav = Read-Host "Would you like to perform another action? `n`nHere are your options again: `n`n1.) Create a new object `n2.) Edit an object's description `n3.) Move an object"
-    
-    if($nav -eq "1"){
-    
-        "`n"
-        New-Object
-    
-    }
-        
-    if($nav -eq "2"){
-    
-        "`n"
-        Edit-Object
-
-    } 
-    
-    if($nav -eq "3"){ 
-
-        "`n"
-        Move-Object
-
-    }  
-    
-} 
     
 function Enable-Account{
 
@@ -119,125 +94,166 @@ function Enable-Account{
         Enable-ADAccount -Identity $user
         Write-Host "$user has been enabled"
         "`n" 
-        Get-ADUser -Identity $user | select Enabled 
+        Get-ADUser -Identity $user | select Enabled | Format-Table
         "`n" 
         pause
+        cls
 
     }else{
     
         Disable-ADAccount -Identity $user
         Write-Host "$user has been disabled" 
         "`n" 
-        Get-ADUser -Identity $user | select Enabled
+        Get-ADUser -Identity $user | select Enabled | Format-Table
         "`n" 
         pause
+        cls
     
         }
     }
 
 function Drive-Access{ 
 
-    Write-Host "In order to grant/remove drive access, the user must be added/removed to or from a group" 
+    Write-Host "In order to grant/remove drive access, the user must be added(+)/removed(-) to or from a group" 
     "`n"  
-    $access = Read-Host "Would you like to add or remove drive access?"
-    $access.ToLower()
+    $access = Read-Host "Would you like to add or remove drive access? [+/-]"
     "`n"
-    if($access -eq "add"){
+    if($access -eq "+"){
 
-        Get-ADGroup -Filter * | select name 
-        "`n" 
-        $groups = Read-Host "Which groups would you like to give access to $user?" 
-        Add-ADGroupMember -Identity $groups -Members $user
+        do{
+
+            Get-ADGroup -Filter * | select name | sort | Format-Table
+            $groups = Read-Host "Which groups would you like to give access to $user?" 
+            Add-ADGroupMember -Identity $groups -Members $user
+            "`n"
+            $again = Read-Host "Would you like to add another? [Y/N]"
+
+            }until($again -eq "N")
+            
+
+        }else{
     
-    }else{
-    
-        Get-ADGroup -Filter * | select name
-        "`n" 
-        $groups = Read-Host "Which groups would you like to remove $user from?" 
-        Remove-ADGroupMember -Identity $groups -Members $user
-    
-    }
+        do{
 
-}
+            Get-ADGroup -Filter * | select name | sort | Format-Table
+            $groups = Read-Host "Which groups would you like to remove $user from?" 
+            Remove-ADGroupMember -Identity $groups -Members $user
+            "`n"
+            $again = Read-Host "Would you like to add another? [Y/N]"
 
-function User-Action{
-
-    $nav = Read-Host "Would you like to perform another action? `n`nHere are your options again: `n1.)Grant/remove drive access `
-    2.) Enable/disable a user" 
-
-    if($nav -eq "1"){
-    
-        Drive-Access
-    
-    }
-
-    if($nav -eq "2"){
-    
-        Enable-Account
-    
-    }
-}
-
-$choice = Read-Host "Would you like to manage a user or manage a computer?"
-$choice.ToLower()
-cls
-
-if($choice -eq "user"){
-    
-    do{
-
-        Get-ADUser -Filter * | select Name
-        "`n" 
-        $user = Read-Host "Which user would you like to manage? If there is no user you would like to manage then press q" 
-        cls
-        $action = Read-Host "Here are a list of choices: `n1.) Grant/remove drive access  
-        `n2.) Enable/disable a user `n`nWhat would you like to do with '$user'? "
-        cls
-
-        if($action -eq "1"){
-        
-            Drive-Access
-            User-Action
-
+            }until($again -eq "N")
         }
+    }
+  
+function Main{
+  
+    $choice = Read-Host "Would you like to manage a user or manage a computer?"
+    $choice.ToLower()
+    cls
+    
+    if($choice -eq "user"){
+    
+            while($true){ 
+    
+                Get-ADUser -Filter * | select SamAccountName | Format-Table 
+    
+                $user = Read-Host "Which user would you like to manage? If there is no user you would like to manage then press 'q' to quit. If you want to configure something else press 'c'
+                
+" 
 
-        if($action -eq "2"){
-         
-            Enable-Account
-            User-Action
+                if($user -eq "q"){
+                
+                    exit
+                
+                }
 
+                if($user -eq "c"){
+                
+                    "`n"
+                    Main
+                
+                }
+    
+                cls
+                $action = Read-Host "Here are a list of choices: 
+                
+1.) Grant/remove drive access  
+2.) Enable/disable a user
+3.) Configure something else
+
+What would you like to do with '$user'?"
+    
+                cls
+    
+                if($action -eq "1"){
+                
+                    Drive-Access
+    
+                    }
+    
+                if($action -eq "2"){
+                 
+                    Enable-Account
+    
+                    }
+
+                if($action -eq "3"){
+                
+                    Main
+                
+                    }
+    
+                }
+    
             }
-
-        }until($user -eq "q")
-
-    }
-
-if($choice -eq "computer"){
-   `
-    Write-Host "Here are your list of choices: `n`n1.) Create a new object `n2.) Edit an object's description `
-3.) Move an object"
-    "`n" 
-    $action = Read-Host "What would you like to do?" 
-    "`n"
-
-    if($action -eq "1"){
+    
+    if($choice -eq "computer"){
+       
+       while($true){
+    
+            Write-Host "Here are your list of choices: 
+            
+1.) Create a new object 
+2.) Edit an object's description 
+3.) Move an object
+4.) Quit
+5.) Configure something else"
         
-            New-Object
-            Computer-Action 
+            "`n"
+            $action = Read-Host "What would you like to do?" 
+            cls
+        
+            if($action -eq "1"){
+                
+                New-Object
+        
+                }
+        
+            if($action -eq "2"){
+        
+                Edit-Object
+          
+                }
+        
+            if($action -eq "3"){
+        
+                 Move-Object
+        
+                }
+    
+            if($action -eq "4"){
+            
+                exit
+            
+                }
 
-        }
+            if($action -eq "5"){
+            
+                Main
 
-    if($action -eq "2"){
-
-            Edit-Object
-            Computer-Action
-
-        }
-
-    if($action -eq "3"){
-
-            Move-Object
-            Computer-Action 
-
+                }
+            }
         }
     }
+
+Main

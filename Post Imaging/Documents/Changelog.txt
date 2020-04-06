@@ -29,5 +29,19 @@ v. 0.6 - 3/27/2020
 call to it from there instead of on the Internet like Dell Command Update
 - Developed the lab software installation option a bit more. It seems I have
 achieved functionality with installing Anaconda but I'm not sure about the
+rest.
+
+v. 0.6.5 - 3/30/2020
+
+- I've created a BUNCH of functions and conditional statements within the
+software installation area not only for organizational purposes but also so
+that I could cut down a massive amount of code 
+- Outside of the software installation function, I've made every other action
+a function. This is so that the script can call back to those functions if the
+user ever wants to complete another action. 
+- I've also gotten rid of the $b variable which made blank lines since I
+realized I could just type in "`n" by itself instead of appending echo or
+Write-Host to it
+- Replaced all the "echo" functions with "Write-Host" 
 rest. Right now there's a lot of functions within functions and variables
 within variables.
