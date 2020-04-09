@@ -35,6 +35,8 @@ function New-Object{
 
     do{
 
+#Receives inputs from the user so that those inputs can be used to create the computer object
+
         $name = Read-Host "Enter name"
         $description = Read-Host "Enter description"
         $path = Read-Host "Enter the OU path"
@@ -51,6 +53,8 @@ function New-Object{
 function Edit-Object{
 
     do{
+
+#Shows a list of all computer objects available and asks the user for a computer and a new description which are stored in values to be used
 
         Get-ADComputer -Filter * | select Name | Format-Table 
         $computer = Read-Host "Which computer would you like to edit?"
@@ -71,6 +75,9 @@ function Move-Object{
 
     do{
 
+#Shows a list of all computer objects and filters them by their distinguished name (which is the one of the only two viable inputs for moving computer objects)
+#The user selects a distinguished name and then inputs the destination OU so that the computer can be moved to that destination 
+
         Get-ADComputer -Filter * | select DistinguishedName | Format-Table
         $identity = Read-Host "Please enter the distinguished name of the object to move"
         "`n"
@@ -86,6 +93,8 @@ function Move-Object{
     }
     
 function Enable-Account{
+
+#After the end user selects a user, they can either enable or disable it. Either way, the computer returns the "Enabled" value of the user to confirm the action
 
     $enable = Read-Host "Press 1 to enable or press 0 to disable the account"
     "`n" 
@@ -113,6 +122,10 @@ function Enable-Account{
     }
 
 function Drive-Access{ 
+
+#Asks the user if they want to grant or remove drive access
+#Either way, the script retrieves a list of groups and asks the end user which group they would like to give/take to/from the user they chose earlier
+#The user inputs the group name and that data is used to add/remove the selected user to/from the group
 
     Write-Host "In order to grant/remove drive access, the user must be added(+)/removed(-) to or from a group" 
     "`n"  
@@ -146,7 +159,12 @@ function Drive-Access{
     }
   
 function Main{
-  
+
+#Asks the end user if they want to manage a user/computer
+#If the end user picks a user, they are then shown a list of users and a set of options 
+#If the und user picks a computer, they are just shown a list of options
+#Either way, the end user can change their mind and go back to configure one or the other
+
     $choice = Read-Host "Would you like to manage a user or manage a computer?"
     $choice.ToLower()
     cls
