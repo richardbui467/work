@@ -1,0 +1,17 @@
+Acrobat Reader DC.lnk
+Box Drive.lnk
+Google
+OneNote.lnk
+Outlook.lnk
+Powerpoint.lnk
+Word.lnk
+Publisher.lnk
+Excel.lnk
+Access.lnk
+Symantec
+Mozilla Firefox
+VideoLAN
+VMWare
+7-Zip
+Wepa
+Alertus

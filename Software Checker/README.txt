@@ -6,6 +6,4 @@ To fix this, run the following command in an elevated powershell session:
 
 Set-ExecutionPolicy -ExecutionPolicy Bypass
 
-This temporarily lifts the restrictions for powershell scripts. Since this script is not digitally signed, the execution policy will prevent it from running.
-
-This script will also not function properly if the "Software_script" directory is not placed within the root of the C: drive.
+This lifts the restrictions for powershell scripts. Since this script is not digitally signed, the execution policy will prevent it from running.

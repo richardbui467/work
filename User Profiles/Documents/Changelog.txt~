@@ -1,20 +1,16 @@
-v. 1.0 
+v1.0 
 
 Shows user profiles and gives the option to delete any
 
-v. 1.1 
+v1.1 
 
 Added a loop so that if the user wanted to delete multiple they can
 
-v. 1.1.1 
+v1.1.1 
 
 Added environmental variables
 
-v. 1.1.2
+v1.1.2
 
 Removed $b and replaced echo with Write-Host
 
-v. 1.1.3 
-
-- Cleaned up comments
-- Replaced aliases with full commands

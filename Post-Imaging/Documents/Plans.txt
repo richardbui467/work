@@ -1,0 +1,5 @@
+Post Imaging Script Plans:
+
++ Look into actual functionality for Update-BIOS
++ Under Invoke-Script, change it so that the end user can choose from the list
++ Maybe look into adding more to $lab_software_list 

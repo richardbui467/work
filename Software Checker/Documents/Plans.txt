@@ -1,5 +1,6 @@
 Future plans:
 
-Look into accuracy
-
-Make the script work from anywhere and not just from the root of C:
+Improving accuracy (Box Drive, Adobe Reader, OneNote)
+Improving the efficiency of the code
+	- Maybe look at implementing functions for calling to the lists
+	  instead of just copying and pasting code

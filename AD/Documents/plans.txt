@@ -1,0 +1,16 @@
+Users and Computers script for AD 
+
+Ideas :
+
+Let the user able to manage the following regarding users
+
+	[X] Drive access
+
+Let the user able to manage the following regarding computers
+
+	[X] Creating new objects
+	[X] Editing object descriptions
+	[X] Moving objects
+
+[X] Allow the script to not be linear but rather divergent so that the end user can go to whichever point they want
+

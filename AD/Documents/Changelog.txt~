@@ -23,7 +23,7 @@ all been tested to work just as intended. Features right now are as follows:
 	-Moving computer objects
 
 - Currently working on giving some divergence to the script and adding
-functions to where the user can go back to certain palces in the script. I've
+functions to where the user can go back to certain places in the script. I've
 added quite a few functions to help accomplish this task.
 - Worked on cleaning up the standard output a little 
 - Added some QoL changes such as showing the status of an account after it is

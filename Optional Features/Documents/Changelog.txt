@@ -1,7 +1,0 @@
-Optional Features script changelog
-
-v1.0 - 3/25/2020
-
-The script disables a registry key that has the computer download from UNL's WSUS servers so that it can download from Microsoft's servers instead.
-After the script disables the key, the user is then asked if they want to enable a feature
-Once the user is done enabling features, the registry key is turned back on again

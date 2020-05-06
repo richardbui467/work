@@ -1,0 +1,20 @@
+.NET 3.5 script changelog
+
+v1.0 - 3/25/2020
+
+The script disables a registry key that has the computer download from UNL's WSUS servers so that it can download from Microsoft's servers instead.
+After the script disables the key, the user is then asked if they want to enable a feature
+Once the user is done enabling features, the registry key is turned back on again
+
+revamp v.1.0 - 3/27/2020
+
+- Changed the script to enable .NET 3.5 only as opposed to giving options to
+install other optional features. Having that sort of functionality was
+redundant and I only wanted to have fun with it. 
+
+v. 1.0.1 - 5/4/2020
+
+- Cleaned up comments
+- Replaced aliases with full commands
+- Updated opening prompt so that it says ".NET 3.5" instead of "Optional
+Features Script"

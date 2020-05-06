@@ -9,43 +9,42 @@ if ($elevated)
 {
 # could not elevate, quit
 }
+ 
+else {
+ 
+Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
+}
+exit
+}
 
-$b = echo "`n" 
+# ---------------------------------------------------------------------------------------------------
 
-cls
-echo "User Profile Script v1.2"
-$b
-echo "Made by Richard Bui 3/5/2020"
-$b
-echo "This script offers a list of user profiles and gives the user the option to delete any"
-$b
+Clear-Host
+Write-Host "User Profile Script v1.1.3, updated 5/4/2020
+
+Made by Richard Bui 3/5/2020
+
+This script offers a list of user profiles and gives the user the option to delete any
+
+"
+
 pause
-cls
+Clear-Host
 
-#Shows the user a list of the user profiles and asks if they want to delete any
-#Switches to the "Users" directory otherwise the script will still be inside the logged in user's directory and will fail
-#If they say "Y", then they input the name of the user profile and it is deleted
+Get-ChildItem "C:\Users`n"
+Set-Location "C:\Users"
+$profile = Read-Host -Prompt "Would you like to delete any profiles? [Y/N]`n" 
 
-dir "C:\Users"
-$b
-cd "C:\Users"
-$profile = Read-Host -Prompt "Would you like to delete any profiles? [Y/N]" 
-
-#If the user hits "Y", then a loop will run. The loop asks the user for which profile they want to delete. 
-#After the user provides input, the shell will say that the profile has been removed and will bring up another listing of the user profiles.
-#Then the script will ask the user if they want to delete another. If they input "Y", the user will be asked for which profile to delete again.
-#This loop will keep running UNTIL the user inputs "N", which ends the script.
+#Continues to ask for profiles to delete until the user says "N"
 
 if ($profile -eq "Y"){
     do{
-        $b
-        $del = Read-Host -Prompt "Which profile would you like to delete?" 
+        
+        $del = Read-Host -Prompt "Which profile would you like to delete?`n" 
         Remove-Item $del -Recurse
-        $b
-        echo "$del has been removed!"
-        $b
-        dir "C:\Users"
-        $b
+        Write-Host "$del has been removed!`n"
+        Get-ChildItem "C:\Users`n"
         $again = Read-Host -Prompt "Would you like to delete another profile? [Y/N]"
-    }until($again = "N")
+        
+    }until($again -eq "N")
 }

@@ -1,0 +1,17 @@
+Post Imaging Script Changelog
+
+5/5/2020
+
+- Added the following functions:
+
+	- Update-Windows
+	- Update-BIOS
+	- Set-LocalAdmin
+	- Install-VPN
+	- Install-NET
+	- Install-Software
+	- Invoke-Script
+
+- The script automatically installs and imports any modules it needs from the
+$modules list 
+
